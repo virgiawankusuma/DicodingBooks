@@ -1,7 +1,28 @@
 function main() {
 
     const getBook = () => {
-        // tuliskan kode di sini!
+        // create instance from XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+
+        // setup callback if response succes or error
+        xhr.onload = function () {
+            const responseJson = JSON.parse(this.responseText);
+            if (responseJson.error) {
+                showResponseMessage(responseJson.message);
+            } else {
+                renderAllBooks(responseJson.books);
+            }
+        }
+
+        xhr.onerror = function () {
+            showResponseMessage();
+        }
+
+        // Making GET request and setup URL Target
+        xhr.open('GET', 'https://virgiawankusuma.github.io/Books-API/books.json');
+
+        // Send Request
+        xhr.send();
     };
 
 
