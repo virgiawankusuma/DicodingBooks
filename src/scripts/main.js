@@ -1,5 +1,7 @@
 function main() {
 
+    const baseUrl = "https://web-server-book-dicoding.appspot.com";
+
     const getBook = () => {
         // create instance from XMLHttpRequest
         const xhr = new XMLHttpRequest();
@@ -18,8 +20,8 @@ function main() {
             showResponseMessage();
         }
 
-        // Making GET request and setup URL Target
-        xhr.open('GET', 'https://virgiawankusuma.github.io/Books-API/books.json');
+        // Making GET request and setup URL target
+        xhr.open('GET', `${baseUrl}/list`);
 
         // Send Request
         xhr.send();
@@ -27,7 +29,29 @@ function main() {
 
 
     const insertBook = (book) => {
-        // tuliskan kode di sini!
+        // create instance from XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+
+        // setup callback if response succes or error
+        xhr.onload = function () {
+            const responseJson = JSON.parse(this.responseText);
+            showResponseMessage(responseJson.message);
+            getBook();
+        }
+
+        xhr.onerror = function () {
+            showResponseMessage();
+        }
+
+        // Making POST request and setup URL target
+        xhr.open("POST", `${baseUrl}/add`);
+
+        // Setup Content-Type property and X-Auth-Token in Header request
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("X-Auth-Token", "12345");
+
+        // Send request and attach JSON.stringify(book) in body
+        xhr.send(JSON.stringify(book));
     };
 
     const updateBook = (book) => {
