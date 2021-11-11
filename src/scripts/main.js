@@ -66,25 +66,22 @@ function main() {
     };
 
     const removeBook = (bookId) => {
-        // setup callback if response succes or error
-        xhr.onload = function () {
-            const responseJson = JSON.parse(this.responseText);
-            showResponseMessage(responseJson.message);
-            getBook();
-        }
-
-        xhr.onerror = function () {
-            showResponseMessage();
-        }
-
-        // Making DELETE request and setup URL target
-        xhr.open("DELETE", `${baseUrl}/delete/${bookId}`);
-
-        // Setup Content-Type property and X-Auth-Token in Header request
-        xhr.setRequestHeader("X-Auth-Token", "12345");
-
-        // Sendingy request
-        xhr.send();
+        fetch(`${baseUrl}/delete/${bookId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-Auth-Token': '12345'
+            }
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(responseJson => {
+                showResponseMessage(responseJson.message);
+                getBook();
+            })
+            .catch(error => {
+                showResponseMessage(error);
+            })
     };
 
 
