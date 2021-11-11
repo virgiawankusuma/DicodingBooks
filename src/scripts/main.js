@@ -48,8 +48,8 @@ function main() {
         xhr.setRequestHeader("X-Auth-Token", "12345");
 
         // Send request and attach JSON.stringify(book) in body
-        // xhr.send(JSON.stringify(book));
-        console.log(JSON.stringify(book));
+        xhr.send(JSON.stringify(book));
+        // console.log(JSON.stringify(book));
     };
 
     const updateBook = (book) => {
@@ -71,12 +71,30 @@ function main() {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("X-Auth-Token", "12345");
 
-        // Mengirimkan request dan menyisipkan JSON.stringify(book) pada body
+        // Send request and attach JSON.stringify(book) in body
         xhr.send(JSON.stringify(book));
     };
 
     const removeBook = (bookId) => {
-        // tuliskan kode di sini!
+        // setup callback if response succes or error
+        xhr.onload = function () {
+            const responseJson = JSON.parse(this.responseText);
+            showResponseMessage(responseJson.message);
+            getBook();
+        }
+
+        xhr.onerror = function () {
+            showResponseMessage();
+        }
+
+        // Making DELETE request and setup URL target
+        xhr.open("DELETE", `${baseUrl}/delete/${bookId}`);
+
+        // Setup Content-Type property and X-Auth-Token in Header request
+        xhr.setRequestHeader("X-Auth-Token", "12345");
+
+        // Sendingy request
+        xhr.send();
     };
 
 
