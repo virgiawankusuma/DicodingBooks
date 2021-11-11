@@ -45,26 +45,24 @@ function main() {
     };
 
     const updateBook = (book) => {
-        // setup callback if response succes or error
-        xhr.onload = function () {
-            const responseJson = JSON.parse(this.responseText);
-            showResponseMessage(responseJson.message);
-            getBook();
-        }
-
-        xhr.onerror = function () {
-            showResponseMessage();
-        }
-
-        // Making PUT request and setup URL target
-        xhr.open("PUT", `${baseUrl}/edit/${book.id}`);
-
-        // Setup Content-Type property and X-Auth-Token in Header request
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("X-Auth-Token", "12345");
-
-        // Send request and attach JSON.stringify(book) in body
-        xhr.send(JSON.stringify(book));
+        fetch(`${baseUrl}/edit/${book.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Token': '12345'
+            },
+            body: JSON.stringify(book)
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(responseJson => {
+                showResponseMessage(responseJson.message);
+                getBook();
+            })
+            .catch(error => {
+                showResponseMessage(error);
+            })
     };
 
     const removeBook = (bookId) => {
