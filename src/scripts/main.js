@@ -6,25 +6,20 @@ function main() {
     const xhr = new XMLHttpRequest();
 
     const getBook = () => {
-        // setup callback if response succes or error
-        xhr.onload = function () {
-            const responseJson = JSON.parse(this.responseText);
-            if (responseJson.error) {
-                showResponseMessage(responseJson.message);
-            } else {
-                renderAllBooks(responseJson.books);
-            }
-        }
-
-        xhr.onerror = function () {
-            showResponseMessage();
-        }
-
-        // Making GET request and setup URL target
-        xhr.open('GET', `${baseUrl}/list`);
-
-        // Send Request
-        xhr.send();
+        fetch(`${baseUrl}/list`)
+            .then(response => {
+                return response.json();
+            })
+            .then(responseJson => {
+                if (responseJson.error) {
+                    showResponseMessage(responseJson.message);
+                } else {
+                    renderAllBooks(responseJson.books);
+                }
+            })
+            .catch(error => {
+                showResponseMessage(error);
+            })
     };
 
 
