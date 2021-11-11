@@ -1,11 +1,11 @@
 function main() {
 
-    const baseUrl = "https://web-server-book-dicoding.appspot.com";
+    const baseUrl = "https://my-json-server.typicode.com/virgiawankusuma/Books-API";
+
+    // create instance from XMLHttpRequest
+    const xhr = new XMLHttpRequest();
 
     const getBook = () => {
-        // create instance from XMLHttpRequest
-        const xhr = new XMLHttpRequest();
-
         // setup callback if response succes or error
         xhr.onload = function () {
             const responseJson = JSON.parse(this.responseText);
@@ -29,9 +29,6 @@ function main() {
 
 
     const insertBook = (book) => {
-        // create instance from XMLHttpRequest
-        const xhr = new XMLHttpRequest();
-
         // setup callback if response succes or error
         xhr.onload = function () {
             const responseJson = JSON.parse(this.responseText);
@@ -51,11 +48,31 @@ function main() {
         xhr.setRequestHeader("X-Auth-Token", "12345");
 
         // Send request and attach JSON.stringify(book) in body
-        xhr.send(JSON.stringify(book));
+        // xhr.send(JSON.stringify(book));
+        console.log(JSON.stringify(book));
     };
 
     const updateBook = (book) => {
-        // tuliskan kode di sini!
+        // setup callback if response succes or error
+        xhr.onload = function () {
+            const responseJson = JSON.parse(this.responseText);
+            showResponseMessage(responseJson.message);
+            getBook();
+        }
+
+        xhr.onerror = function () {
+            showResponseMessage();
+        }
+
+        // Making PUT request and setup URL target
+        xhr.open("PUT", `${baseUrl}/edit/${book.id}`);
+
+        // Setup Content-Type property and X-Auth-Token in Header request
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("X-Auth-Token", "12345");
+
+        // Mengirimkan request dan menyisipkan JSON.stringify(book) pada body
+        xhr.send(JSON.stringify(book));
     };
 
     const removeBook = (bookId) => {
